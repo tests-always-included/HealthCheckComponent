@@ -36,4 +36,7 @@ class HealthCheckEvents
 
     /** @const string */
     const EVENT_TEST_ERROR = 'health.check.test.error'; 
+
+    /** @const string */
+    const EVENT_TEST_COMPLETED = 'health.check.test.completed';
 }
