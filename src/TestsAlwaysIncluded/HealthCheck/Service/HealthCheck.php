@@ -3,7 +3,7 @@
 namespace TestsAlwaysIncluded\HealthCheck\Services;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use TestsAlwaysIncluded\HealthCheck\Exception\HealthCheckException;
+use TestsAlwaysIncluded\HealthCheck\Exception\HealthCheckExceptionInterface;
 use TestsAlwaysIncluded\HealthCheck\HealthCheckEvents;
 use TestsAlwaysIncluded\HealthCheck\Reporter\Reporter;
 use TestsAlwaysIncluded\HealthCheck\Test\TestSuite;
@@ -103,7 +103,7 @@ class HealthCheck
 
                     try {
                         $test->execute();
-                    } catch (HealthCheckException $exception) {
+                    } catch (HealthCheckExceptionInterface $exception) {
                         $test->error($exception->getMessage());
                     }
 
