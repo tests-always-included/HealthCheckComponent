@@ -138,6 +138,7 @@ class HealthCheck
                         $test->error($exception->getMessage());
                         $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_TEST_ERROR, $event);
                     }
+                    $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_TEST_COMPLETED, $event);
                 }
                 $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_TEST_GROUP_COMPLETED, $event);
             }
