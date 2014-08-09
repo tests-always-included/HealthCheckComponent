@@ -4,7 +4,7 @@ namespace TestsAlwaysIncluded\HealthCheck\Reporter;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-abstract class AbstractConsoleReporter implements ConsoleOutputReporterInterface
+abstract class AbstractConsoleReporter extends Reporter implements ConsoleOutputReporterInterface
 {
     /** @var ConsoleOutput */
     protected $consoleOutput;
