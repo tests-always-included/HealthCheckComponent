@@ -9,6 +9,10 @@ use TestsAlwaysIncluded\HealthCheck\Test\TestSuite;
 
 class HealthCheckEvent extends Event
 {
+    /** @var HealthCheck */
+    protected $healthCheck;
+
+
     /** @var TestSuite */
     protected $testSuite;
 
@@ -24,7 +28,7 @@ class HealthCheckEvent extends Event
     /**
      * @param TestSuite $suite
      */
-    public function setTestSuite(TestSuite $testSuite)
+    public function setTestSuite(TestSuite $testSuite = null)
     {
         $this->suite = $testSuite;
     }
@@ -42,7 +46,7 @@ class HealthCheckEvent extends Event
     /**
      * @param TestGroup $testGroup
      */
-    public function setTestGroup(TestGroup $testGroup)
+    public function setTestGroup(TestGroup $testGroup = null)
     {
         $this->testGroup = $testGroup;
     }
@@ -60,7 +64,7 @@ class HealthCheckEvent extends Event
     /**
      * @param Test $test
      */
-    public function setTest(Test $test)
+    public function setTest(Test $test = null)
     {
         $this->test = $test;
     }
