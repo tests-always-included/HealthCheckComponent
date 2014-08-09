@@ -9,10 +9,6 @@ use TestsAlwaysIncluded\HealthCheck\Test\TestSuite;
 
 class HealthCheckEvent extends Event
 {
-    /** @var HealthCheck */
-    protected $healthCheck;
-
-
     /** @var TestSuite */
     protected $testSuite;
 
