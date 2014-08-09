@@ -166,6 +166,19 @@ class ReporterSubscriber implements EventSubscriberInterface
 
 
     /**
+     * Notifies reporters that the test has finished.
+     * @param HealthCheckEvent $healthCheckEvent
+     */
+    public function onTestCompleted(HealthCheckEvent $healthCheckEvent)
+    {
+        $reporters = $this->healthCheck->getReporters();
+        foreach ($reporters as $reporter) {
+            $reporter->testComplete($healthCheckEvent);
+        }
+    }
+
+
+    /**
      * @return array
      */
     static public function getSubscribedEvents()
@@ -182,6 +195,7 @@ class ReporterSubscriber implements EventSubscriberInterface
             HealthCheckEvents::EVENT_TEST_FAILED => 'onTestFailed',
             HealthCheckEvents::EVENT_TEST_SKIPPED => 'onTestSkipped',
             HealthCheckEvents::EVENT_TEST_ERROR => 'onTestError',
+            HealthCheckEvents::EVENT_TEST_COMPLETED => 'onTestCompleted',
         );
     }
 }
