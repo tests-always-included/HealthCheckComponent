@@ -103,4 +103,13 @@ class Reporter
     public function testError(HealthCheckEvent $healthCheckEvent)
     {
     }
+
+
+    /**
+     * Do something when a test is done.
+     * @param HealthCheckEvent $healthCheckEvent
+     */
+    public function testCompleted(HealthCheckEvent $healthCheckEvent)
+    {
+    }
 }
