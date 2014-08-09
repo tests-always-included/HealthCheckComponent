@@ -70,41 +70,63 @@ class HealthCheck
 
 
     /**
+     * @param string $eventName
+     * @param TestSuite $testSuite
+     * @param TestGroup $testGroup
+     * @param Test $test
+     */
+    private function fire($eventName, TestSuite $testSuite = null, TestGroup $testGroup = null, Test $test = null)
+    {
+        $event = new HealthCheckEvent();
+        $event->setTestSuite($testSuite);
+        $event->setTestGroup($testGroup);
+        $event->setTest($test); 
+        $this->eventDispatcher->dispatch($eventName, $event);
+    }
+
+
+    /**
      * Executes the HealthCheck.
      */
     public function run()
     {
-        $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_HEALTH_CHECK_STARTED, new HealthCheckEvent);
-        // N
+        $this->fire(HealthCheckEvent::EVENT_HEALTH_CHECK_STARTED);
+
         foreach ($this->testSuites as $testSuite) {
-            $event = new HealthCheckEvent;
-            $event->setTestSuite($testSuite);
-            $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_TEST_SUITE_STARTED, $event);
-            // N^2
-            foreach ($testSuite->getTestGroups() as $group) {
-                $event->setTestGroup($group);
-                $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_TEST_GROUP_STARTED, $event);
-                // N^3 ... ohmuhgawdicandobettah.
+            $this->fire(HealthCheckEvent::EVENT_TEST_SUITE_STARTED, $testSuite);
+
+            foreach ($testSuite->getTestGroups() as $testGroup) {
+                $this->fire(HealthCheckEvent::EVENT_TEST_GROUP_STARTED, $testSuite, $testGroup);
+
                 foreach ($group->getTests() as $test) {
-                    $event->setTest($test);
-                    $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_TEST_STARTED, $event);
+                    $this->fire(HealthCheckEvent::EVENT_TEST_STARTED, $testSuite, $testGroup, $test);
+
                     try {
                         $test->execute();
-                        $eventName = $test->skipped() ? 
-                            HealthCheckEvent::EVENT_TEST_SKIPPED :
-                            $test->passed() ? 
-                                HealthCheckEvent::EVENT_TEST_PASSED : HealthCheckEvent::EVENT_TEST_FAILED;
-                        $this->eventDispatcher->dispatch($eventName, $event);
                     } catch (HealthCheckException $exception) {
                         $test->error($exception->getMessage());
-                        $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_TEST_ERROR, $event);
                     }
-                    $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_TEST_COMPLETED, $event);
+
+                    if ($test->passed()) {
+                        $eventName = HealthCheckEvent::EVENT_TEST_PASSED;
+                    } else if ($test->failed()) {
+                        $eventName = HealthCheckEvent::EVENT_TEST_FAILED;
+                    } else if ($test->inError()) {
+                        $eventName = HealthCheckEvent::EVENT_TEST_ERROR;
+                    } else if ($test->skipped()) {
+                        $eventName = HealthCheckEvent::EVENT_TEST_SKIPPED;
+                    }
+
+                    $this->fire($eventName, $testSuite, $testGroup, $test);
+                    $this->fire(HealthCheckEvent::EVENT_TEST_COMPLETED, $testSuite, $testGroup, $test);
                 }
-                $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_TEST_GROUP_COMPLETED, $event);
+
+                $this->fire(HealthCheckEvent::EVENT_TEST_GROUP_COMPLETED, $testSuite, $testGroup);
             }
-            $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_TEST_SUITE_COMPLETED, $event);
+
+            $this->fire(HealthCheckEvent::EVENT_TEST_SUITE_COMPLETED, $testSuite);
         }
-        $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_HEALTH_CHECK_COMPLETED, new HealthCheckEvent);
+
+        $this->fire(HealthCheckEvent::EVENT_HEALTH_CHECK_COMPLETED);
     }
 }
