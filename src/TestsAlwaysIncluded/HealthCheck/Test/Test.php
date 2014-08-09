@@ -148,7 +148,7 @@ abstract class Test
      */
     public function skip($reason = null)
     {
-        $this->reason($reason);
+        $this->setReason($reason);
         $this->state = static::STATE_SKIPPED;
     }
 
