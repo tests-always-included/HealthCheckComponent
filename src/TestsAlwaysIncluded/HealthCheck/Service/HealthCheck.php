@@ -22,25 +22,12 @@ class HealthCheck
     protected $reporters = array();
 
 
-    /** @var boolean */
-    protected $trapErrors = true;
-
-
     /**
      * @param EventDispatcher $eventDispatcher
      */
     public function setEventDispatcher(EventDispatcher $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
-    }
-
-
-    /**
-     * @param boolean $trapErrors
-     */
-    public function setTrapErrors($trapErrors)
-    {
-        $this->trapErrors = $trapErrors;
     }
 
 
@@ -83,36 +70,10 @@ class HealthCheck
 
 
     /**
-     * Custom error handler.
-     * @param int $errno
-     * @param string $errstr
-     * @param string $errfile
-     * @param int $errline
-     * @param array $errcontext
-     * @throws HealthCheckException
-     */
-    private function errorHandler($errno, $errstr, $errfile, $errline, array $errcontext)
-    {
-        // Our error level isn't including this error.
-        if (!(error_reporting() & $errno)) {
-            return;
-        }
-
-        $exception = new HealthCheckException($errstr, $errno);
-        $exception->setFile($errfile);
-        $exception->setLine($errline);
-        throw $exception;
-    }
-
-
-    /**
      * Executes the HealthCheck.
      */
     public function run()
     {
-        if ($this->trapErrors) {
-            set_error_handler(array($this, 'errorHandler'));
-        }
         $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_HEALTH_CHECK_STARTED, new HealthCheckEvent);
         // N
         foreach ($this->testSuites as $testSuite) {
@@ -145,8 +106,5 @@ class HealthCheck
             $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_TEST_SUITE_COMPLETED, $event);
         }
         $this->eventDispatcher->dispatch(HealthCheckEvent::EVENT_HEALTH_CHECK_COMPLETED, new HealthCheckEvent);
-        if ($this->trapErrors) {
-            restore_error_handler();
-        }
     }
 }
