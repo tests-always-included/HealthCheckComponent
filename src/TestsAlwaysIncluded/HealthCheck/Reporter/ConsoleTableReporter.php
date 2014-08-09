@@ -102,40 +102,7 @@ class ConsoleTableReporter extends AbstractConsoleReporter
      * Do something when a test passes.
      * @param HealthCheckEvent $healthCheckEvent
      */
-    public function testPassed(HealthCheckEvent $healthCheckEvent)
-    {
-        $row = $this->buildTableRow($healthCheckEvent);
-        $this->tableHelper->addRow($row);
-    }
-
-
-    /**
-     * Do something when a test fails.
-     * @param HealthCheckEvent $healthCheckEvent
-     */
-    public function testFailed(HealthCheckEvent $healthCheckEvent)
-    {
-        $row = $this->buildTableRow($healthCheckEvent);
-        $this->tableHelper->addRow($row);
-    }
-
-
-    /**
-     * Do something when a test is skipped.
-     * @param HealthCheckEvent $healthCheckEvent
-     */
-    public function testSkipped(HealthCheckEvent $healthCheckEvent)
-    {
-        $row = $this->buildTableRow($healthCheckEvent);
-        $this->tableHelper->addRow($row);
-    }
-
-
-    /**
-     * Do something when a test triggers an error.
-     * @param HealthCheckEvent $healthCheckEvent
-     */
-    public function testError(HealthCheckEvent $healthCheckEvent)
+    public function testCompleted(HealthCheckEvent $healthCheckEvent)
     {
         $row = $this->buildTableRow($healthCheckEvent);
         $this->tableHelper->addRow($row);
