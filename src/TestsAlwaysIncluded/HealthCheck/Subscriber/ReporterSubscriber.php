@@ -9,6 +9,10 @@ use TestsAlwaysIncluded\HealthCheck\Service\HealthCheck;
 
 class ReporterSubscriber implements EventSubscriberInterface
 {
+    /** @const int */
+    const PRIORITY = 0;
+
+
     /** @var HealthCheck */
     protected $healthCheck;
 
@@ -184,18 +188,18 @@ class ReporterSubscriber implements EventSubscriberInterface
     static public function getSubscribedEvents()
     {
         return array(
-            HealthCheckEvents::EVENT_HEALTH_CHECK_STARTED => 'onHealthCheckStarted',
-            HealthCheckEvents::EVENT_HEALTH_CHECK_COMPLETED => 'onHealthCheckCompleted',
-            HealthCheckEvents::EVENT_TEST_SUITE_STARTED => 'onTestSuiteStarted',
-            HealthCheckEvents::EVENT_TEST_SUITE_COMPLETED => 'onTestSuiteCompleted',
-            HealthCheckEvents::EVENT_TEST_GROUP_STARTED => 'onTestGroupStarted',
-            HealthCheckEvents::EVENT_TEST_GROUP_COMPLETED => 'onTestGroupCompleted',
-            HealthCheckEvents::EVENT_TEST_STARTED => 'onTestStarted',
-            HealthCheckEvents::EVENT_TEST_PASSED => 'onTestPassed',
-            HealthCheckEvents::EVENT_TEST_FAILED => 'onTestFailed',
-            HealthCheckEvents::EVENT_TEST_SKIPPED => 'onTestSkipped',
-            HealthCheckEvents::EVENT_TEST_ERROR => 'onTestError',
-            HealthCheckEvents::EVENT_TEST_COMPLETED => 'onTestCompleted',
+            HealthCheckEvents::EVENT_HEALTH_CHECK_STARTED => array('onHealthCheckStarted', static::PRIORITY),
+            HealthCheckEvents::EVENT_HEALTH_CHECK_COMPLETED => array('onHealthCheckCompleted', static::PRIORITY),
+            HealthCheckEvents::EVENT_TEST_SUITE_STARTED => array('onTestSuiteStarted', static::PRIORITY),
+            HealthCheckEvents::EVENT_TEST_SUITE_COMPLETED => array('onTestSuiteCompleted', static::PRIORITY),
+            HealthCheckEvents::EVENT_TEST_GROUP_STARTED => array('onTestGroupStarted', static::PRIORITY),
+            HealthCheckEvents::EVENT_TEST_GROUP_COMPLETED => array('onTestGroupCompleted', static::PRIORITY),
+            HealthCheckEvents::EVENT_TEST_STARTED => array('onTestStarted', static::PRIORITY),
+            HealthCheckEvents::EVENT_TEST_PASSED => array('onTestPassed', static::PRIORITY),
+            HealthCheckEvents::EVENT_TEST_FAILED => array('onTestFailed', static::PRIORITY),
+            HealthCheckEvents::EVENT_TEST_SKIPPED => array('onTestSkipped', static::PRIORITY),
+            HealthCheckEvents::EVENT_TEST_ERROR => array('onTestError', static::PRIORITY),
+            HealthCheckEvents::EVENT_TEST_COMPLETED => array('onTestCompleted', static::PRIORITY),
         );
     }
 }
