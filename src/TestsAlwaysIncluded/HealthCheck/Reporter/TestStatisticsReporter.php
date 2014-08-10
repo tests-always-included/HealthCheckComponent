@@ -18,6 +18,9 @@ class TestStatisticsReporter extends Reporter
     /** @var int */
     protected $skipped = 0;
 
+    /** @var int */
+    protected $run = 0;
+
 
     /**
      * @return int
@@ -52,6 +55,24 @@ class TestStatisticsReporter extends Reporter
     public function getSkipped()
     {
         return $this->failed;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getRun()
+    {
+        return $this->run;
+    }
+
+
+    /**
+     * @param HealthCheckEvent $healthCheckEvent
+     */
+    public function testStarted(HealthCheckEvent $event)
+    {
+        $this->run ++;
     }
 
 
