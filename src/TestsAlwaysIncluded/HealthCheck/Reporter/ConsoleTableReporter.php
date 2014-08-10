@@ -11,6 +11,10 @@ class ConsoleTableReporter extends AbstractConsoleReporter
     protected $tableHelper;
 
 
+    /** @var array */
+    protected $row;
+
+
     /**
      * @param TableHelper $tableHelper
      */
@@ -65,36 +69,56 @@ class ConsoleTableReporter extends AbstractConsoleReporter
 
 
     /**
-     * Build a table row.
-     *
      * @param HealthCheckEvent $healthCheckEvent
-     * @return string[]
      */
-    protected function buildTableRow(HealthCheckEvent $healthCheckEvent)
+    public function testPassed(HealthCheckEvent $healthCheckEvent)
+    {
+        $state = $healthCheckEvent->getTest()->getState();
+        $this->row[] = sprintf('<info>%s</info>', $state);
+    }
+
+
+    /**
+     * @param HealthCheckEvent $healthCheckEvent
+     */
+    public function testFailed(HealthCheckEvent $healthCheckEvent)
+    {
+        $state = $healthCheckEvent->getTest()->getState();
+        $this->row[] = sprintf('<error>%s</error>', $state);
+    }
+
+
+    /**
+     * @param HealthCheckEvent $healthCheckEvent
+     */
+    public function testSkipped(HealthCheckEvent $healthCheckEvent)
+    {
+        $state = $healthCheckEvent->getTest()->getState();
+        $this->row[] = sprintf('<comment>%s</comment>', $state);
+    }
+
+
+    /**
+     * @param HealthCheckEvent $healthCheckEvent
+     */
+    public function testError(HealthCheckEvent $healthCheckEvent)
+    {
+        $state = $healthCheckEvent->getTest()->getState();
+        $this->row[] = sprintf('<error>%s</error>', $state);
+    }
+
+
+    /**
+     * Do something when a test begins.
+     * @param HealthCheckEvent $healthCheckEvent
+     */
+    public function testStarted(HealthCheckEvent $healthCheckEvent)
     {
         $row = array();
         $row[] = $healthCheckEvent->getTestSuite()->getName();
         $row[] = $healthCheckEvent->getTestGroup()->getName();
-
-        $test = $healthCheckEvent->getTest();
-        $state = $healthCheckEvent->getState();
-        $row[] = $test->getName();
-
-        if ($test->passed()) {
-            $row[] = sprintf('<info>%s</info>', $state);
-        } else if ($test->failed()) {
-            $row[] = sprintf('<error>%s</error>', $state);
-        } else if ($test->skipped()) {
-            $row[] = sprintf('<comment>%s</comment>', $state);
-        } else if ($test->inError()) {
-            $row[] = sprintf('<error>%s</error>', $state);
-        }
-
-        if ($this->consoleOutput->isVerbose()) {
-            $row[] = $test->getReason();
-        }
-
-        return $row;
+        $row[] = $healthCheckEvent->getTest()->getName();
+        $this->row = $row;
     }
 
 
@@ -104,7 +128,10 @@ class ConsoleTableReporter extends AbstractConsoleReporter
      */
     public function testCompleted(HealthCheckEvent $healthCheckEvent)
     {
-        $row = $this->buildTableRow($healthCheckEvent);
-        $this->tableHelper->addRow($row);
+        if ($this->consoleOutput->isVerbose()) {
+            $this->row[] = $test->getReason();
+        }
+
+        $this->tableHelper->addRow($this->row);
     }
 }
