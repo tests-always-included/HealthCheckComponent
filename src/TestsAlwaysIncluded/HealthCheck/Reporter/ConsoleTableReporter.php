@@ -25,6 +25,15 @@ class ConsoleTableReporter extends AbstractConsoleReporter
 
 
     /**
+     * @return array
+     */
+    public function getRow()
+    {
+        return $this->row;
+    }
+
+
+    /**
      * Generate an array of table headers.
      *
      * @param HealthCheckEvent $healthCheckEvent
