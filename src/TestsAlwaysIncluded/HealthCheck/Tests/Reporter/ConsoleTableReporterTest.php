@@ -16,16 +16,23 @@ class ConsoleTableReporterTest extends \PHPUnit_Framework_TestCase
      * @param string $testSuiteName
      * @param string $testGroupName
      * @param string $testName
+     * @param string $callToMake
+     * @param array $arguments
      * @return HealthCheckEvent
      */
-    protected function makeEvent($testSuiteName, $testGroupName, $testName)
+    protected function makeEvent($testSuiteName, $testGroupName, $testName, $callToMake = null, $arguments = array())
     {
         $testSuite = new TestSuite;
         $testSuite->setName($testSuiteName);
         $testGroup = new TestGroup;
         $testGroup->setName($testGroupName);
-        $test = new Test;
+        $test = $this->getMockBuilder('TestsAlwaysIncluded\HealthCheck\Test\Test')
+            ->setConstructorArgs(array($testName))
+            ->getMockForAbstractClass();
         $test->setName($testName);
+        if ($callToMake) {
+            call_user_func_array(array($test, $callToMake), $arguments);
+        }
         $event = new HealthCheckEvent;
         $event->setTestSuite($testSuite);
         $event->setTestGroup($testGroup);
@@ -56,7 +63,7 @@ class ConsoleTableReporterTest extends \PHPUnit_Framework_TestCase
         $testSuiteName = 'TestSuite';
         $testGroupName = 'TestGroup';
         $testName = 'Test';
-        $event = $this->makeEvent($testSuiteName, $testGroupName, $testName);
+        $event = $this->makeEvent($testSuiteName, $testGroupName, $testName, 'pass');
         $reporter = new ConsoleTableReporter;
         $reporter->testPassed($event);
         $expected = array(
@@ -71,7 +78,7 @@ class ConsoleTableReporterTest extends \PHPUnit_Framework_TestCase
         $testSuiteName = 'TestSuite';
         $testGroupName = 'TestGroup';
         $testName = 'Test';
-        $event = $this->makeEvent($testSuiteName, $testGroupName, $testName);
+        $event = $this->makeEvent($testSuiteName, $testGroupName, $testName, 'fail');
         $reporter = new ConsoleTableReporter;
         $reporter->testFailed($event);
         $expected = array(
@@ -86,7 +93,7 @@ class ConsoleTableReporterTest extends \PHPUnit_Framework_TestCase
         $testSuiteName = 'TestSuite';
         $testGroupName = 'TestGroup';
         $testName = 'Test';
-        $event = $this->makeEvent($testSuiteName, $testGroupName, $testName);
+        $event = $this->makeEvent($testSuiteName, $testGroupName, $testName, 'skip');
         $reporter = new ConsoleTableReporter;
         $reporter->testSkipped($event);
         $expected = array(
@@ -101,7 +108,7 @@ class ConsoleTableReporterTest extends \PHPUnit_Framework_TestCase
         $testSuiteName = 'TestSuite';
         $testGroupName = 'TestGroup';
         $testName = 'Test';
-        $event = $this->makeEvent($testSuiteName, $testGroupName, $testName);
+        $event = $this->makeEvent($testSuiteName, $testGroupName, $testName, 'error');
         $reporter = new ConsoleTableReporter;
         $reporter->testError($event);
         $expected = array(
@@ -238,8 +245,9 @@ class ConsoleTableReporterTest extends \PHPUnit_Framework_TestCase
             ->method('isVerbose')
             ->will($this->returnValue($isVerbose));
         $mockTableHelper->expects($this->once())
-            ->method('render')
+            ->method('addRow')
             ->with($expected);
+
         $event = $this->makeEvent('TestSuite', 'TestGroup', 'Test');
         $reporter = new ConsoleTableReporter;
         $reporter->setConsoleOutput($mockConsoleOutput);
