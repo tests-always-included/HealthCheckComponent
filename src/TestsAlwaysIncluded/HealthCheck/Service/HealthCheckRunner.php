@@ -1,10 +1,13 @@
 <?php
 
-namespace TestsAlwaysIncluded\HealthCheck\Services;
+namespace TestsAlwaysIncluded\HealthCheck\Service;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use TestsAlwaysIncluded\HealthCheck\Event\HealthCheckEvent;
 use TestsAlwaysIncluded\HealthCheck\Exception\HealthCheckExceptionInterface;
 use TestsAlwaysIncluded\HealthCheck\HealthCheckEvents;
+use TestsAlwaysIncluded\HealthCheck\Test\Test;
+use TestsAlwaysIncluded\HealthCheck\Test\TestGroup;
 use TestsAlwaysIncluded\HealthCheck\Test\TestSuite;
 
 class HealthCheckRunner
@@ -57,7 +60,7 @@ class HealthCheckRunner
             foreach ($testSuite->getTestGroups() as $testGroup) {
                 $this->fire(HealthCheckEvents::EVENT_TEST_GROUP_STARTED, $healthCheck, $testSuite, $testGroup);
 
-                foreach ($group->getTests() as $test) {
+                foreach ($testGroup->getTests() as $test) {
                     $this->fire(HealthCheckEvents::EVENT_TEST_STARTED, $healthCheck, $testSuite, $testGroup, $test);
 
                     try {
