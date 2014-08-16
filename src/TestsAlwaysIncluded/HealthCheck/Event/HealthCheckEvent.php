@@ -3,12 +3,17 @@
 namespace TestsAlwaysIncluded\HealthCheck\Event;
 
 use Symfony\Component\EventDispatcher\Event;
+use TestsAlwaysIncluded\HealthCheck\Services\HealthCheck;
 use TestsAlwaysIncluded\HealthCheck\Test\Test;
 use TestsAlwaysIncluded\HealthCheck\Test\TestGroup;
 use TestsAlwaysIncluded\HealthCheck\Test\TestSuite;
 
 class HealthCheckEvent extends Event
 {
+    /** @var HealthCheck */
+    protected $healthCheck;
+
+
     /** @var TestSuite */
     protected $testSuite;
 
@@ -19,6 +24,24 @@ class HealthCheckEvent extends Event
 
     /** @var Test */
     protected $test;
+
+
+    /**
+     * @param HealthCheck $healthCheck
+     */
+    public function setHealthCheck(HealthCheck $healthCheck)
+    {
+        $this->healthCheck = $healthCheck;
+    }
+
+
+    /**
+     * @return HealthCheck
+     */
+    public function getHealthCheck()
+    {
+        return $this->healthCheck;
+    }
 
 
     /**
