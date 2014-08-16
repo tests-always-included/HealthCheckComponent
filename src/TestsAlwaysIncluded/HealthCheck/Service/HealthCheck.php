@@ -1,6 +1,6 @@
 <?php
 
-namespace TestsAlwaysIncluded\HealthCheck\Services;
+namespace TestsAlwaysIncluded\HealthCheck\Service;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use TestsAlwaysIncluded\HealthCheck\Reporter\Reporter;
