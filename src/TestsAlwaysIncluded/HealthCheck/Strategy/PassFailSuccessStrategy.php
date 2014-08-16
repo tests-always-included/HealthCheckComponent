@@ -26,11 +26,11 @@ class PassFailSuccessStrategy implements SuccessStrategyInterface
     public function execute(HealthCheck $healthCheck)
     {
         $passing = true;
-        foreach ($this->getTestSuites() as $testSuite) {
+        foreach ($healthCheck->getTestSuites() as $testSuite) {
             foreach ($testSuite->getTestGroups() as $testGroup) {
                 foreach ($testGroup->getTests() as $test) {
                     // Dont count skipped tests against us.
-                    if ($test->skipped() && ! $this->treatSkipAsFail) continue;
+                    if ($test->skipped() && $this->treatSkipAsFail === false) continue;
                     $passing = $passing && $test->passed();
                 }
             }
