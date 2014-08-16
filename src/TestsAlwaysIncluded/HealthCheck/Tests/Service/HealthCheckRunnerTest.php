@@ -7,6 +7,7 @@ use TestsAlwaysIncluded\HealthCheck\Exception\HealthCheckException;
 use TestsAlwaysIncluded\HealthCheck\HealthCheckEvents;
 use TestsAlwaysIncluded\HealthCheck\Reporter\Reporter;
 use TestsAlwaysIncluded\HealthCheck\Service\HealthCheck;
+use TestsAlwaysIncluded\HealthCheck\Service\HealthCheckRunner;
 use TestsAlwaysIncluded\HealthCheck\Test\Test;
 use TestsAlwaysIncluded\HealthCheck\Test\TestGroup;
 use TestsAlwaysIncluded\HealthCheck\Test\TestSuite;
@@ -155,7 +156,8 @@ class HealthCheckRunnerTest extends \PHPUnit_Framework_TestCase
         $testSuite = new TestSuite;
         $testGroup = new TestGroup;
         $mockTest = $this->getMockBuilder('TestsAlwaysIncluded\HealthCheck\Test\Test')
-            ->setMethods(array_keys($test))
+            ->setConstructorArgs(array('test'))
+            ->setMethods(array_merge(array('execute'), array_keys($testCalls)))
             ->getMockForAbstractClass();
         $chain = $mockTest->expects($this->once())
             ->method('execute');
@@ -165,43 +167,44 @@ class HealthCheckRunnerTest extends \PHPUnit_Framework_TestCase
         }
         foreach ($testCalls as $methodName => $options) {
             $chain = $mockTest->expects($this->once())
-                ->method($methodName)
-                ->with($options['args'])
-                ->will($this->returnValue($options['return']));
+                ->method($methodName);
+            if (! empty($options['args'])) {
+                $chain->with($options['args']);
+            }
+            $chain->will($this->returnValue($options['return']));
         }
         $mockDispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcher')
             ->disableOriginalConstructor()
             ->setMethods((array) 'dispatch')
             ->getMock();
         $healthCheck = new HealthCheck;
-        $nextEvent = function () use (&$expectedCalls, $healthCheck, $testSuite, $testGroup, $test) {
+        $nextEvent = function () use (&$expectedCalls, $healthCheck, $testSuite, $testGroup, $mockTest) {
             $eventName = key($expectedCalls);
             $eventArgs = array_shift($expectedCalls);
             $event = new HealthCheckEvent;
             $event->setHealthCheck($healthCheck);
-            if ($eventArgs[0]) {
+            if (! empty($eventArgs[0])) {
                 $event->setTestSuite($testSuite);
             }
-            if ($eventArgs[1]) {
+            if (! empty($eventArgs[1])) {
                 $event->setTestGroup($testGroup);
             }
-            if ($eventArgs[2]) {
-                $event->setTest($test);
+            if (! empty($eventArgs[2])) {
+                $event->setTest($mockTest);
             }
-            return array(
-                $eventName,
-                $event
-            );
+            return array($eventName, $event);
         };
         $mockDispatcher->expects($this->exactly(count($expectedCalls)))
             ->method('dispatch')
-            ->with($this->returnCallback($nextEvent));
+            ->with($this->callback($nextEvent));
         $testSuite->addTestGroup($testGroup);
-        $testGroup->addTest($test);
-        $healthCheck->registerTestSuite($testSuite);
+        $testGroup->addTest($mockTest);
+        $healthCheck->addTestSuite($testSuite);
         if ($catchException === false) {
             $this->setExpectedException($exceptionData['class'], $exceptionData['message']);
         }
-        $healthCheck->run();
+        $runner = new HealthCheckRunner();
+        $runner->setEventDispatcher($mockDispatcher);
+        $runner->run($healthCheck);
     }
 }
