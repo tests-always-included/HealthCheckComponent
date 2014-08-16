@@ -54,7 +54,7 @@ class TestStatisticsReporter extends Reporter
      */
     public function getSkipped()
     {
-        return $this->failed;
+        return $this->skipped;
     }
 
 
