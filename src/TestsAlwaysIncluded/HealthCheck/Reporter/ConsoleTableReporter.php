@@ -138,7 +138,7 @@ class ConsoleTableReporter extends AbstractConsoleReporter
     public function testCompleted(HealthCheckEvent $healthCheckEvent)
     {
         if ($this->consoleOutput->isVerbose()) {
-            $this->row[] = $test->getReason();
+            $this->row[] = $healthCheckEvent->getTest()->getReason();
         }
 
         $this->tableHelper->addRow($this->row);
