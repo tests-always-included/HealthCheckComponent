@@ -5,25 +5,11 @@ namespace TestsAlwaysIncluded\HealthCheck\Subscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use TestsAlwaysIncluded\HealthCheck\Event\HealthCheckEvent;
 use TestsAlwaysIncluded\HealthCheck\HealthCheckEvents;
-use TestsAlwaysIncluded\HealthCheck\Service\HealthCheck;
 
 class ReporterSubscriber implements EventSubscriberInterface
 {
     /** @const int */
     const PRIORITY = 0;
-
-
-    /** @var HealthCheck */
-    protected $healthCheck;
-
-
-    /**
-     * @param HealthCheck $healthCheck
-     */
-    public function setHealthCheck(HealthCheck $healthCheck)
-    {
-        $this->healthCheck = $healthCheck;
-    }
 
 
     /**
@@ -32,7 +18,7 @@ class ReporterSubscriber implements EventSubscriberInterface
      */
     public function onHealthCheckStarted(HealthCheckEvent $healthCheckEvent)
     {
-        $reporters = $this->healthCheck->getReporters();
+        $reporters = $healthCheckEvent->getHealthCheck()->getReporters();
         foreach ($reporters as $reporter) {
             $reporter->healthCheckStarted($healthCheckEvent);
         }
@@ -45,7 +31,7 @@ class ReporterSubscriber implements EventSubscriberInterface
      */
     public function onHealthCheckCompleted(HealthCheckEvent $healthCheckEvent)
     {
-        $reporters = $this->healthCheck->getReporters();
+        $reporters = $healthCheckEvent->getHealthCheck()->getReporters();
         foreach ($reporters as $reporter) {
             $reporter->healthCheckCompleted($healthCheckEvent);
         }
@@ -58,7 +44,7 @@ class ReporterSubscriber implements EventSubscriberInterface
      */
     public function onTestSuiteStarted(HealthCheckEvent $healthCheckEvent)
     {
-        $reporters = $this->healthCheck->getReporters();
+        $reporters = $healthCheckEvent->getHealthCheck()->getReporters();
         foreach ($reporters as $reporter) {
             $reporter->testSuiteStarted($healthCheckEvent);
         }
@@ -71,7 +57,7 @@ class ReporterSubscriber implements EventSubscriberInterface
      */
     public function onTestSuiteCompleted(HealthCheckEvent $healthCheckEvent)
     {
-        $reporters = $this->healthCheck->getReporters();
+        $reporters = $healthCheckEvent->getHealthCheck()->getReporters();
         foreach ($reporters as $reporter) {
             $reporter->testSuiteCompleted($healthCheckEvent);
         }
@@ -84,7 +70,7 @@ class ReporterSubscriber implements EventSubscriberInterface
      */
     public function onTestGroupStarted(HealthCheckEvent $healthCheckEvent)
     {
-        $reporters = $this->healthCheck->getReporters();
+        $reporters = $healthCheckEvent->getHealthCheck()->getReporters();
         foreach ($reporters as $reporter) {
             $reporter->testGroupStarted($healthCheckEvent);
         }
@@ -97,7 +83,7 @@ class ReporterSubscriber implements EventSubscriberInterface
      */
     public function onTestGroupCompleted(HealthCheckEvent $healthCheckEvent)
     {
-        $reporters = $this->healthCheck->getReporters();
+        $reporters = $healthCheckEvent->getHealthCheck()->getReporters();
         foreach ($reporters as $reporter) {
             $reporter->testGroupCompleted($healthCheckEvent);
         }
@@ -110,7 +96,7 @@ class ReporterSubscriber implements EventSubscriberInterface
      */
     public function onTestStarted(HealthCheckEvent $healthCheckEvent)
     {
-        $reporters = $this->healthCheck->getReporters();
+        $reporters = $healthCheckEvent->getHealthCheck()->getReporters();
         foreach ($reporters as $reporter) {
             $reporter->testStarted($healthCheckEvent);
         }
@@ -123,7 +109,7 @@ class ReporterSubscriber implements EventSubscriberInterface
      */
     public function onTestPassed(HealthCheckEvent $healthCheckEvent)
     {
-        $reporters = $this->healthCheck->getReporters();
+        $reporters = $healthCheckEvent->getHealthCheck()->getReporters();
         foreach ($reporters as $reporter) {
             $reporter->testPassed($healthCheckEvent);
         }
@@ -136,7 +122,7 @@ class ReporterSubscriber implements EventSubscriberInterface
      */
     public function onTestFailed(HealthCheckEvent $healthCheckEvent)
     {
-        $reporters = $this->healthCheck->getReporters();
+        $reporters = $healthCheckEvent->getHealthCheck()->getReporters();
         foreach ($reporters as $reporter) {
             $reporter->testFailed($healthCheckEvent);
         }
@@ -149,7 +135,7 @@ class ReporterSubscriber implements EventSubscriberInterface
      */
     public function onTestSkipped(HealthCheckEvent $healthCheckEvent)
     {
-        $reporters = $this->healthCheck->getReporters();
+        $reporters = $healthCheckEvent->getHealthCheck()->getReporters();
         foreach ($reporters as $reporter) {
             $reporter->testSkipped($healthCheckEvent);
         }
@@ -162,7 +148,7 @@ class ReporterSubscriber implements EventSubscriberInterface
      */
     public function onTestError(HealthCheckEvent $healthCheckEvent)
     {
-        $reporters = $this->healthCheck->getReporters();
+        $reporters = $healthCheckEvent->getHealthCheck()->getReporters();
         foreach ($reporters as $reporter) {
             $reporter->testError($healthCheckEvent);
         }
@@ -175,7 +161,7 @@ class ReporterSubscriber implements EventSubscriberInterface
      */
     public function onTestCompleted(HealthCheckEvent $healthCheckEvent)
     {
-        $reporters = $this->healthCheck->getReporters();
+        $reporters = $healthCheckEvent->getHealthCheck()->getReporters();
         foreach ($reporters as $reporter) {
             $reporter->testComplete($healthCheckEvent);
         }
