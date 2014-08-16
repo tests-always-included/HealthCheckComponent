@@ -32,7 +32,7 @@ class ConsoleReporter extends AbstractConsoleReporter
      */
     public function testSkipped(HealthCheckEvent $healthCheckEvent)
     {
-        $this->consoleOutput->write('<comment>S</comment');
+        $this->consoleOutput->write('<comment>S</comment>');
     }
 
 
