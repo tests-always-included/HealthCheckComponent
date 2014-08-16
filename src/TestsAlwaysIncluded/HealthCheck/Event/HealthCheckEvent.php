@@ -3,7 +3,7 @@
 namespace TestsAlwaysIncluded\HealthCheck\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use TestsAlwaysIncluded\HealthCheck\Services\HealthCheck;
+use TestsAlwaysIncluded\HealthCheck\Service\HealthCheck;
 use TestsAlwaysIncluded\HealthCheck\Test\Test;
 use TestsAlwaysIncluded\HealthCheck\Test\TestGroup;
 use TestsAlwaysIncluded\HealthCheck\Test\TestSuite;
@@ -49,7 +49,7 @@ class HealthCheckEvent extends Event
      */
     public function setTestSuite(TestSuite $testSuite = null)
     {
-        $this->suite = $testSuite;
+        $this->testSuite = $testSuite;
     }
 
 
