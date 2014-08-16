@@ -5,11 +5,11 @@ namespace TestsAlwaysIncluded\HealthCheck\Tests\Service;
 use TestsAlwaysIncluded\HealthCheck\Event\HealthCheckEvent;
 use TestsAlwaysIncluded\HealthCheck\Exception\HealthCheckException;
 use TestsAlwaysIncluded\HealthCheck\HealthCheckEvents;
+use TestsAlwaysIncluded\HealthCheck\Reporter\Reporter;
 use TestsAlwaysIncluded\HealthCheck\Service\HealthCheck;
 use TestsAlwaysIncluded\HealthCheck\Test\Test;
 use TestsAlwaysIncluded\HealthCheck\Test\TestGroup;
 use TestsAlwaysIncluded\HealthCheck\Test\TestSuite;
-use TestsAlwaysIncluded\HealthCheck\Reporter\Reporter;
 
 class HealthCheckRunnerTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,15 +26,15 @@ class HealthCheckRunnerTest extends \PHPUnit_Framework_TestCase
                 'exceptionData' => null,
                 'catchException' => null,
                 'expectedCalls' => array(
-                    HealthCheckEvent::EVENT_HEALTH_CHECK_STARTED => array(),
-                    HealthCheckEvent::EVENT_TEST_SUITE_STARTED => array(true, null, null),
-                    HealthCheckEvent::EVENT_TEST_GROUP_STARTED => array(true, true, null),
-                    HealthCheckEvent::EVENT_TEST_STARTED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_PASSED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_COMPLETED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_GROUP_COMPLETED => array(true, true, null),
-                    HealthCheckEvent::EVENT_TEST_SUITE_COMPLETED => array(true, null, null),
-                    HealthCheckEvent::EVENT_HEALTH_CHECK_COMPLETED => array(),
+                    HealthCheckEvents::EVENT_HEALTH_CHECK_STARTED => array(),
+                    HealthCheckEvents::EVENT_TEST_SUITE_STARTED => array(true, null, null),
+                    HealthCheckEvents::EVENT_TEST_GROUP_STARTED => array(true, true, null),
+                    HealthCheckEvents::EVENT_TEST_STARTED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_PASSED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_COMPLETED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_GROUP_COMPLETED => array(true, true, null),
+                    HealthCheckEvents::EVENT_TEST_SUITE_COMPLETED => array(true, null, null),
+                    HealthCheckEvents::EVENT_HEALTH_CHECK_COMPLETED => array(),
                 ),
             ),
             '1 suite, 1 group, 1 test, failed' => array(
@@ -47,15 +47,15 @@ class HealthCheckRunnerTest extends \PHPUnit_Framework_TestCase
                 'exceptionData' => null,
                 'catchException' => null,
                 'expectedCalls' => array(
-                    HealthCheckEvent::EVENT_HEALTH_CHECK_STARTED => array(),
-                    HealthCheckEvent::EVENT_TEST_SUITE_STARTED => array(true, null, null),
-                    HealthCheckEvent::EVENT_TEST_GROUP_STARTED => array(true, true, null),
-                    HealthCheckEvent::EVENT_TEST_STARTED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_FAILED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_COMPLETED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_GROUP_COMPLETED => array(true, true, null),
-                    HealthCheckEvent::EVENT_TEST_SUITE_COMPLETED => array(true, null, null),
-                    HealthCheckEvent::EVENT_HEALTH_CHECK_COMPLETED => array(),
+                    HealthCheckEvents::EVENT_HEALTH_CHECK_STARTED => array(),
+                    HealthCheckEvents::EVENT_TEST_SUITE_STARTED => array(true, null, null),
+                    HealthCheckEvents::EVENT_TEST_GROUP_STARTED => array(true, true, null),
+                    HealthCheckEvents::EVENT_TEST_STARTED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_FAILED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_COMPLETED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_GROUP_COMPLETED => array(true, true, null),
+                    HealthCheckEvents::EVENT_TEST_SUITE_COMPLETED => array(true, null, null),
+                    HealthCheckEvents::EVENT_HEALTH_CHECK_COMPLETED => array(),
                 ),
 
             ),
@@ -69,15 +69,15 @@ class HealthCheckRunnerTest extends \PHPUnit_Framework_TestCase
                 'exceptionData' => null,
                 'catchException' => null,
                 'expectedCalls' => array(
-                    HealthCheckEvent::EVENT_HEALTH_CHECK_STARTED => array(),
-                    HealthCheckEvent::EVENT_TEST_SUITE_STARTED => array(true, null, null),
-                    HealthCheckEvent::EVENT_TEST_GROUP_STARTED => array(true, true, null),
-                    HealthCheckEvent::EVENT_TEST_STARTED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_SKIPPED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_COMPLETED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_GROUP_COMPLETED => array(true, true, null),
-                    HealthCheckEvent::EVENT_TEST_SUITE_COMPLETED => array(true, null, null),
-                    HealthCheckEvent::EVENT_HEALTH_CHECK_COMPLETED => array(),
+                    HealthCheckEvents::EVENT_HEALTH_CHECK_STARTED => array(),
+                    HealthCheckEvents::EVENT_TEST_SUITE_STARTED => array(true, null, null),
+                    HealthCheckEvents::EVENT_TEST_GROUP_STARTED => array(true, true, null),
+                    HealthCheckEvents::EVENT_TEST_STARTED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_SKIPPED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_COMPLETED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_GROUP_COMPLETED => array(true, true, null),
+                    HealthCheckEvents::EVENT_TEST_SUITE_COMPLETED => array(true, null, null),
+                    HealthCheckEvents::EVENT_HEALTH_CHECK_COMPLETED => array(),
                 ),
             ),
             '1 suite, 1 group, 1 test, error' => array(
@@ -90,15 +90,15 @@ class HealthCheckRunnerTest extends \PHPUnit_Framework_TestCase
                 'exceptionData' => null,
                 'catchException' => null,
                 'expectedCalls' => array(
-                    HealthCheckEvent::EVENT_HEALTH_CHECK_STARTED => array(),
-                    HealthCheckEvent::EVENT_TEST_SUITE_STARTED => array(true, null, null),
-                    HealthCheckEvent::EVENT_TEST_GROUP_STARTED => array(true, true, null),
-                    HealthCheckEvent::EVENT_TEST_STARTED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_ERROR => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_COMPLETED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_GROUP_COMPLETED => array(true, true, null),
-                    HealthCheckEvent::EVENT_TEST_SUITE_COMPLETED => array(true, null, null),
-                    HealthCheckEvent::EVENT_HEALTH_CHECK_COMPLETED => array(),
+                    HealthCheckEvents::EVENT_HEALTH_CHECK_STARTED => array(),
+                    HealthCheckEvents::EVENT_TEST_SUITE_STARTED => array(true, null, null),
+                    HealthCheckEvents::EVENT_TEST_GROUP_STARTED => array(true, true, null),
+                    HealthCheckEvents::EVENT_TEST_STARTED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_ERROR => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_COMPLETED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_GROUP_COMPLETED => array(true, true, null),
+                    HealthCheckEvents::EVENT_TEST_SUITE_COMPLETED => array(true, null, null),
+                    HealthCheckEvents::EVENT_HEALTH_CHECK_COMPLETED => array(),
                 ),
             ),
             '1 suite, 1 group, 1 test, uncaught exception' => array(
@@ -109,10 +109,10 @@ class HealthCheckRunnerTest extends \PHPUnit_Framework_TestCase
                 ),
                 'catchException' => false,
                 'expectedCalls' => array(
-                    HealthCheckEvent::EVENT_HEALTH_CHECK_STARTED => array(),
-                    HealthCheckEvent::EVENT_TEST_SUITE_STARTED => array(true, null, null),
-                    HealthCheckEvent::EVENT_TEST_GROUP_STARTED => array(true, true, null),
-                    HealthCheckEvent::EVENT_TEST_STARTED => array(true, true, true),
+                    HealthCheckEvents::EVENT_HEALTH_CHECK_STARTED => array(),
+                    HealthCheckEvents::EVENT_TEST_SUITE_STARTED => array(true, null, null),
+                    HealthCheckEvents::EVENT_TEST_GROUP_STARTED => array(true, true, null),
+                    HealthCheckEvents::EVENT_TEST_STARTED => array(true, true, true),
                 ),
             ),
             '1 suite, 1 group, 1 test, caught exception' => array(
@@ -132,15 +132,15 @@ class HealthCheckRunnerTest extends \PHPUnit_Framework_TestCase
                 ),
                 'catchException' => true,
                 'expectedCalls' => array(
-                    HealthCheckEvent::EVENT_HEALTH_CHECK_STARTED => array(),
-                    HealthCheckEvent::EVENT_TEST_SUITE_STARTED => array(true, null, null),
-                    HealthCheckEvent::EVENT_TEST_GROUP_STARTED => array(true, true, null),
-                    HealthCheckEvent::EVENT_TEST_STARTED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_ERROR => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_COMPLETED => array(true, true, true),
-                    HealthCheckEvent::EVENT_TEST_GROUP_COMPLETED => array(true, true, null),
-                    HealthCheckEvent::EVENT_TEST_SUITE_COMPLETED => array(true, null, null),
-                    HealthCheckEvent::EVENT_HEALTH_CHECK_COMPLETED => array(),
+                    HealthCheckEvents::EVENT_HEALTH_CHECK_STARTED => array(),
+                    HealthCheckEvents::EVENT_TEST_SUITE_STARTED => array(true, null, null),
+                    HealthCheckEvents::EVENT_TEST_GROUP_STARTED => array(true, true, null),
+                    HealthCheckEvents::EVENT_TEST_STARTED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_ERROR => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_COMPLETED => array(true, true, true),
+                    HealthCheckEvents::EVENT_TEST_GROUP_COMPLETED => array(true, true, null),
+                    HealthCheckEvents::EVENT_TEST_SUITE_COMPLETED => array(true, null, null),
+                    HealthCheckEvents::EVENT_HEALTH_CHECK_COMPLETED => array(),
                 ),
             ),
         );
