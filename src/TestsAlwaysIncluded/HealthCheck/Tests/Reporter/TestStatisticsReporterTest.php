@@ -2,15 +2,22 @@
 
 namespace TestsAlwaysIncludedd\HealthCheck\Tests\Reporter;
 
-use TestsAlwaysIncludd\HealthCheck\Test\Test;
+use TestsAlwaysIncluded\HealthCheck\Test\Test;
 use TestsAlwaysIncluded\HealthCheck\Event\HealthCheckEvent;
 use TestsAlwaysIncluded\HealthCheck\Reporter\TestStatisticsReporter;
 
 class TestStatisticsReporterTest extends \PHPUnit_Framework_TestCase
 {
+    protected function makeTest()
+    {
+        return $this->getMockBuilder('TestsAlwaysIncluded\HealthCheck\Test\Test')
+            ->setConstructorArgs(array('test'))
+            ->getMockForAbstractClass();
+    }
+
     public function testGetFailed()
     {
-        $test = new Test;
+        $test = $this->makeTest();
         $test->fail();
         $event = new HealthCheckEvent();
         $event->setTest($test);
@@ -26,7 +33,7 @@ class TestStatisticsReporterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPassed()
     {
-        $test = new Test;
+        $test = $this->makeTest();
         $test->pass();
         $event = new HealthCheckEvent();
         $event->setTest($test);
@@ -42,7 +49,7 @@ class TestStatisticsReporterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSkipped()
     {
-        $test = new Test;
+        $test = $this->makeTest();
         $test->skip();
         $event = new HealthCheckEvent();
         $event->setTest($test);
@@ -58,7 +65,7 @@ class TestStatisticsReporterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetErrors()
     {
-        $test = new Test;
+        $test = $this->makeTest();
         $test->error();
         $event = new HealthCheckEvent();
         $event->setTest($test);
@@ -74,7 +81,7 @@ class TestStatisticsReporterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRun()
     {
-        $test = new Test;
+        $test = $this->makeTest();
         $event = new HealthCheckEvent();
         $event->setTest($test);
         $reporter = new TestStatisticsReporter;
