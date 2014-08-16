@@ -6,10 +6,17 @@ use TestsAlwaysIncluded\HealthCheck\Test\Test;
 
 class TestTest extends \PHPUnit_Framework_TestCase
 {
+    protected function makeTest($name)
+    {
+        return $this->getMockBuilder('TestsAlwaysIncluded\HealthCheck\Test\Test')
+            ->setConstructorArgs(array($name))
+            ->getMockForAbstractClass();
+    }
+
     public function testSetGetName()
     {
         $name = 'hello';
-        $test = new Test();
+        $test = $this->makeTest($name);
         $test->setName($name);
         $this->assertSame($name, $test->getName());
     }
@@ -18,7 +25,7 @@ class TestTest extends \PHPUnit_Framework_TestCase
     public function testPassed()
     {
         $reason = 'hello';
-        $test = new Test;
+        $test = $this->makeTest('test');
         $test->pass($reason);
         $this->assertTrue($test->passed());
         $this->assertFalse($test->failed());
@@ -31,7 +38,7 @@ class TestTest extends \PHPUnit_Framework_TestCase
     public function testFailed()
     {
         $reason = 'hello';
-        $test = new Test;
+        $test = $this->makeTest('test');
         $test->fail($reason);
         $this->assertTrue($test->failed());
         $this->assertFalse($test->passed());
@@ -44,7 +51,7 @@ class TestTest extends \PHPUnit_Framework_TestCase
     public function testSkipped()
     {
         $reason = 'hello';
-        $test = new Test;
+        $test = $this->makeTest('test');
         $test->skip($reason);
         $this->assertTrue($test->skipped());
         $this->assertFalse($test->failed());
@@ -57,7 +64,7 @@ class TestTest extends \PHPUnit_Framework_TestCase
     public function testError()
     {
         $reason = 'hello';
-        $test = new Test;
+        $test = $this->makeTest('test');
         $test->error($reason);
         $this->assertTrue($test->inError());
         $this->assertFalse($test->failed());
