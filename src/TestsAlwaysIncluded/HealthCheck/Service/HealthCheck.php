@@ -4,6 +4,7 @@ namespace TestsAlwaysIncluded\HealthCheck\Service;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use TestsAlwaysIncluded\HealthCheck\Reporter\Reporter;
+use TestsAlwaysIncluded\HealthCheck\Strategy\SuccessStrategyInterface;
 use TestsAlwaysIncluded\HealthCheck\Test\TestSuite;
 
 class HealthCheck
@@ -51,5 +52,15 @@ class HealthCheck
     public function getTestSuites()
     {
         return $this->testSuites;
+    }
+
+
+    /**
+     * @param SuccessStrategyInterface $successStrategy
+     * @return boolean
+     */
+    public function passed(SuccessStrategyInterface $successStrategy)
+    {
+        return $successStrategy->execute($this);
     }
 }
