@@ -27,7 +27,7 @@ class TestSuiteTest extends \PHPUnit_Framework_TestCase
             $testGroup1,
             $testGroup2
         );
-        $testSuite->setGroups($testGroups);
+        $testSuite->setTestGroups($testGroups);
         $this->assertSame($testGroups, $testSuite->getTestGroups());
     }
 
