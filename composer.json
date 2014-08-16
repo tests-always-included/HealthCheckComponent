@@ -1,17 +1,22 @@
 {
     "autoload": {
-        "psr-4": {
+        "psr-0": {
             "TestsAlwaysIncluded\\": "src/"
         }
     },
     "description": "A generic HealthChecker component for use with Symfony2 and alike projects.",
     "homepage": "https://github.com/tests-always-included/HealthCheckComponent",
     "license": "MIT",
-    "minimum-stability": "dev",
     "name": "tests-always-included/health-check",
     "type": "library",
     "require-dev": {
-        "phpunit/phpunit": "@dev"
+        "phpunit/phpunit": "~3.7"
+    },
+    "require": {
+        "symfony/event-dispatcher": "~2.5"
+    },
+    "suggest": {
+        "symfony/console": "~2.5"
     },
     "support": {
         "issues": "https://github.com/tests-always-included/HealthCheckComponent/issues",
