@@ -7,6 +7,13 @@ use TestsAlwaysIncluded\HealthCheck\Test\TestGroup;
 
 class TestGroupTest extends \PHPUnit_Framework_TestCase
 {
+    protected function makeTest($name)
+    {
+        return $this->getMockBuilder('TestsAlwaysIncluded\HealthCheck\Test\Test')
+            ->setConstructorArgs(array($name))
+            ->getMockForAbstractClass();
+    }
+
     public function testSetGetName()
     {
         $name = 'hello';
@@ -18,10 +25,8 @@ class TestGroupTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGetTests()
     {
-        $test = new Test;
-        $test->setName('TEST#1');
-        $test2 = new Test;
-        $test2->setName('TEST#2');
+        $test = $this->makeTest('TEST#1');
+        $test2 = $this->makeTest('TEST#2');
         $testGroup = new TestGroup();
         $tests = array(
             $test,
@@ -34,7 +39,7 @@ class TestGroupTest extends \PHPUnit_Framework_TestCase
 
     public function testAddTest()
     {
-        $test = new Test;
+        $test = $this->makeTest('TEST');
         $testGroup = new TestGroup();
         $testGroup->addTest($test);
         $expected = array(
