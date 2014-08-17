@@ -47,6 +47,15 @@ class HealthCheck
 
 
     /**
+     * @param TestSuite[] $testSuites
+     */
+    public function setTestSuites($testSuites) 
+    {
+        $this->testSuites = $testSuites;
+    }
+
+
+    /**
      * @return TestSuite[]
      */
     public function getTestSuites()
