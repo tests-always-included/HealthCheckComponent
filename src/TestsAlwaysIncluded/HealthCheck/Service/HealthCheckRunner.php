@@ -2,7 +2,7 @@
 
 namespace TestsAlwaysIncluded\HealthCheck\Service;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use TestsAlwaysIncluded\HealthCheck\Event\HealthCheckEvent;
 use TestsAlwaysIncluded\HealthCheck\Exception\HealthCheckExceptionInterface;
 use TestsAlwaysIncluded\HealthCheck\HealthCheckEvents;
@@ -12,14 +12,14 @@ use TestsAlwaysIncluded\HealthCheck\Test\TestSuite;
 
 class HealthCheckRunner
 {
-    /** @var EventDispatcher */
+    /** @var EventDispatcherInterface */
     protected $eventDispatcher;
 
 
     /**
-     * @param EventDispatcher $eventDispatcher
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function setEventDispatcher(EventDispatcher $eventDispatcher)
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
     }
