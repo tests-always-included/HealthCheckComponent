@@ -3,6 +3,8 @@ HealthCheckComponent
 
 A generic HealthChecker component for use with Symfony2 and alike projects.
 
+[![Build Status](https://travis-ci.org/tests-always-included/HealthCheckComponent.svg)](https://travis-ci.org/tests-always-included/HealthCheckComponent)
+
 ## Features
 * Organizable tests in TestSuites and TestGroups.
 * Customizable reporting.
